@@ -1,5 +1,7 @@
 """
 This is just a starting document to get some foundational code layed out. Feel free to edit as you wish and make large revision, I just wanted to get things started. Good luck everyone!
+
+Need to create geometry of the grid(s) as well as dimensions and boundary conditions
 """
 
 #ION-I Optics grids simulations
