@@ -1,9 +1,9 @@
 """
-This is just a starting document to get some foundational code layed out. Feel free to edit as you wish and make large revision, I just wanted to get things started. Good luck everyone!
+This is just a starting document to get some foundational code layed out. Feel free to edit as you wish and make large revision, I just wanted to get things started.
 
-Need to create geometry of the grid(s) as well as dimensions and boundary conditions
+Need to assign boundary conditions and set up actual simulation.
 
-This is a crude simulation setup with only one center hole in each of the grids. This is due to FEEM being a 2D application. We could also simulate each plate separately
+This is a crude simulation setup with only one center hole in each of the grids. This is due to FEMM being a 2D application. We could also simulate each plate separately
 and make them more detailed if we switched to planar mode
 """
 
@@ -84,7 +84,7 @@ femm.ei_addmaterial('screen_grid', 1, 1, 1e6) # change based on material
 
 femm.ei_setblockprop("screen_grid", 1, 0, 0)
 
-#Set screen grid voltage
+# Assign screen grid voltage
 
 femm.ei_clearselected()
 femm.ei_refreshview()
