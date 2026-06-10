@@ -67,6 +67,17 @@ vseg(Rout, 0, ts)
 hseg(Rs, Rout, 0)     # bottom face
 hseg(Rs, Rout, ts)    # top face
 
+# Assign screen grid material + voltage
+femm.ei_addblocklabel((Rs + Rout)/2, ts/2)
+femm.ei_selectlabel((Rs + Rout)/2, ts/2)
+femm.ei_addmaterial('screen_grid', 1, 1, 0)
+femm.ei_setblockprop("screen_grid", 1, 0, 0)
+
+#Assign screen grid voltage here
+
+femm.ei_clearselected()
+femm.ei_refreshview()
+
 
 '''
 Accelerator Grid
@@ -82,6 +93,17 @@ vseg(Rout, g, g + ta)
 hseg(Ra, Rout, g)
 hseg(Ra, Rout, g + ta)
 
+# Assign accel grid material + voltage
+femm.ei_addblocklabel((Ra + Rout)/2, g + ta/2)
+femm.ei_selectlabel((Ra + Rout)/2, g + ta/2)
+femm.ei_addmaterial('accel_grid', 1, 1, 0)
+femm.ei_setblockprop("accel_grid", 1, 0, 0)
+
+#Assign accel grid voltage here
+
+femm.ei_clearselected()
+femm.ei_refreshview()
+
 
 '''
 Boundary Region
@@ -92,6 +114,13 @@ vseg(Rout, -2, g + ta + 2)
 # Bottom and top caps
 hseg(0, Rout, -2)
 hseg(0, Rout, g + ta + 2)
+
+# Fill boundary region with air
+femm.ei_addmaterial('air', 1, 1, 0)
+femm.ei_addblocklabel(Rout/2, (g + ta)/2)
+femm.ei_selectlabel(Rout/2, (g + ta)/2)
+femm.ei_setblockprop("air", 1, 0, 0)
+femm.ei_clearselected()
 
 
 '''
