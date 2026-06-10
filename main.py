@@ -13,7 +13,7 @@ import numpy as np
 #Open FEMM and create electrostatic document
 femm.openfemm()
 femm.newdocument(1) # 1 denotes electrostatic problem
-femm.ei_zoom(-5,-5,5,5) # Can adjust this if we change the grid radius. Rout = 3.0 at this time
+femm.ei_zoom(-5,-5,5,5) # Can adjust this if we change the grid radius. Rout = 3.0 at time of (-5,-5,5,5) implementation
 
 
 
