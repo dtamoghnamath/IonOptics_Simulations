@@ -16,7 +16,7 @@ import numpy as np
 #Open FEMM and create electrostatic document
 femm.openfemm()
 femm.newdocument(1) # 1 denotes electrostatic problem
-femm.ei_zoom(-1,-1,2,3) 
+femm.ei_zoom(-6,-3,2,5)
 
 
 
@@ -81,3 +81,21 @@ vseg(Rout, g, g + ta)
 # Top and bottom faces
 hseg(Ra, Rout, g)
 hseg(Ra, Rout, g + ta)
+
+
+'''
+Boundary Region
+'''
+# Vertical outer boundary
+vseg(Rout, -2, g + ta + 2)
+
+# Bottom and top caps
+hseg(0, Rout, -2)
+hseg(0, Rout, g + ta + 2)
+
+
+'''
+Extra stuff
+'''
+# Ensure that labels update
+femm.ei_refreshview()
