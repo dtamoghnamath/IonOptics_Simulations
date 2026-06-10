@@ -59,17 +59,17 @@ def hseg(r1, r2, z):
     femm.ei_addnode(r1, z)
     femm.ei_addnode(r2, z)
     femm.ei_addsegment(r1, z, r2, z)
-
+    
 
 
 '''
 Screen Grid
 '''
 
-#Hole wall
+# Hole wall
 vseg(Rs, 0, ts)
 
-#Metal region
+# Metal region
 vseg(Rout, 0, ts)
 
 # Top and bottom faces
@@ -79,10 +79,12 @@ hseg(Rs, Rout, ts)    # top face
 # Assign screen grid material + voltage
 femm.ei_addblocklabel((Rs + Rout)/2, ts/2)
 femm.ei_selectlabel((Rs + Rout)/2, ts/2)
-femm.ei_addmaterial('screen_grid', 1, 1, 0)
+femm.ei_addmaterial('screen_grid', 1, 1, 1e6) # change based on material
+#(name, permittivity_x, permittivity_y, conductivity)
+
 femm.ei_setblockprop("screen_grid", 1, 0, 0)
 
-#Assign screen grid voltage here
+#Set screen grid voltage
 
 femm.ei_clearselected()
 femm.ei_refreshview()
@@ -106,10 +108,12 @@ hseg(Ra, Rout, g + ta)
 # Assign accel grid material + voltage
 femm.ei_addblocklabel((Ra + Rout)/2, g + ta/2)
 femm.ei_selectlabel((Ra + Rout)/2, g + ta/2)
-femm.ei_addmaterial('accel_grid', 1, 1, 0)
+femm.ei_addmaterial('accel_grid', 1, 1, 1e6) # change based on material
+#(name, permittivity_x, permittivity_y, conductivity)
+
 femm.ei_setblockprop("accel_grid", 1, 0, 0)
 
-#Assign accel grid voltage here
+# Assign accel grid voltage
 
 femm.ei_clearselected()
 femm.ei_refreshview()
@@ -119,6 +123,7 @@ femm.ei_refreshview()
 '''
 Boundary Region
 '''
+
 # Vertical outer boundary
 vseg(Rout, -2, g + ta + 2)
 
@@ -126,17 +131,22 @@ vseg(Rout, -2, g + ta + 2)
 hseg(0, Rout, -2)
 hseg(0, Rout, g + ta + 2)
 
-# Fill boundary region with air
+# Fill boundary region with air and set voltage
 femm.ei_addmaterial('air', 1, 1, 0)
 femm.ei_addblocklabel(Rout/2, (g + ta)/2)
 femm.ei_selectlabel(Rout/2, (g + ta)/2)
 femm.ei_setblockprop("air", 1, 0, 0)
+
+# Assign boundary voltage
+
 femm.ei_clearselected()
+femm.ei_refreshview()
 
 
 
 '''
 Extra stuff
 '''
+
 # Ensure that labels update
 femm.ei_refreshview()
