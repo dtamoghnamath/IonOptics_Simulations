@@ -2,6 +2,9 @@
 This is just a starting document to get some foundational code layed out. Feel free to edit as you wish and make large revision, I just wanted to get things started. Good luck everyone!
 
 Need to create geometry of the grid(s) as well as dimensions and boundary conditions
+
+This is a crude simulation setup with only one center hole in each of the grids. This is due to FEEM being a 2D application. We could also simulate each plate separately
+and make them more detailed if we switched to planar mode
 """
 
 #ION-I Optics grids simulations
@@ -13,7 +16,7 @@ import numpy as np
 #Open FEMM and create electrostatic document
 femm.openfemm()
 femm.newdocument(1) # 1 denotes electrostatic problem
-femm.ei_zoom(-5,-5,5,5) # Can adjust this if we change the grid radius. Rout = 3.0 at time of (-5,-5,5,5) implementation
+femm.ei_zoom(-1,-1,2,3) 
 
 
 
@@ -36,43 +39,45 @@ V_accel  = -1000.0  # accel potential (V)
 
 
 
-#Function for easier segment and arc connection
-def seg(x1, y1, x2, y2):
-    femm.ei_addnode(x1, y1)
-    femm.ei_addnode(x2, y2)
-    femm.ei_addsegment(x1, y1, x2, y2)
+#Functions for adding segments easier
+#Helper: add a vertical segment (grid wall or hole wall)
+def vseg(r, z1, z2):
+    femm.ei_addnode(r, z1)
+    femm.ei_addnode(r, z2)
+    femm.ei_addsegment(r, z1, r, z2)
 
-def arc(x1, y1, x2, y2, angle, max_segments):
-    femm.ei_addnode(x1, y1)
-    femm.ei_addnode(x2, y2)
-    femm.ei_addarc(x1, y1, x2, y2, angle, max_segments)
+#Helper: add a horizontal segment (top/bottom of plate)
+def hseg(r1, r2, z):
+    femm.ei_addnode(r1, z)
+    femm.ei_addnode(r2, z)
+    femm.ei_addsegment(r1, z, r2, z)
 
 
-
-#Outer circle shape
 '''
-The old circle code before arc function
-femm.ei_addnode(0, 0 + Rout)
-femm.ei_addnode(0, 0 - Rout)
-femm.ei_addarc(0, 0 + Rout, 0, 0 - Rout, 180, 1)
-femm.ei_addarc(0, 0 - Rout, 0, 0 + Rout, 180, 1)
+Screen Grid
 '''
-arc(0,0+Rout,0,0-Rout,180,1) #New code using arc function
-arc(0,0-Rout,0,0+Rout,180,1)
+
+#Hole wall
+vseg(Rs, 0, ts)
+
+#Metal region
+vseg(Rout, 0, ts)
+
+# Top and bottom faces
+hseg(Rs, Rout, 0)     # bottom face
+hseg(Rs, Rout, ts)    # top face
 
 
+'''
+Accelerator Grid
+'''
 
-#Make grid the proper material (stainless steel 304)
-femm.ei_addmaterial('stainless steel 304', 1, 1, 1e6) # NOT ACCURATE
-#(name, permittivity_x, permittivity_y, conductivity)
+# Hole wall
+vseg(Ra, g, g + ta)
 
-# Add block label inside circle
-femm.ei_addblocklabel(0.1 * Rout, 0)
-femm.ei_selectlabel(0.1 * Rout, 0)
+# Metal region
+vseg(Rout, g, g + ta)
 
-# Assign material to circle region
-femm.ei_setblockprop("stainless steel 304", 1, 0, 0) # (name, automesh, meshsize, group)
-femm.ei_clearselected()
-femm.ei_refreshview()
-
-
+# Top and bottom faces
+hseg(Ra, Rout, g)
+hseg(Ra, Rout, g + ta)
