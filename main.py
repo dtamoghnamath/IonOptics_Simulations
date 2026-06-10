@@ -13,7 +13,7 @@ import numpy as np
 #Open FEMM and create electrostatic document
 femm.openfemm()
 femm.newdocument(1) # 1 denotes electrostatic problem
-femm.ei_zoomnatural() # make sure to manually zoom to fully see everything
+femm.ei_zoom(-5,-5,5,5) # Can adjust this if we change the grid radius. Rout = 3.0 at this time
 
 
 
@@ -33,3 +33,20 @@ Rout = 3.0  # outer radius of unit cell (mm)
 
 V_screen = 0.0      # screen potential (V)
 V_accel  = -1000.0  # accel potential (V)
+
+
+
+#Function for easier segment connection
+#Will add function for arc connection as well
+def seg(x1, y1, x2, y2):
+    femm.ei_addnode(x1, y1)
+    femm.ei_addnode(x2, y2)
+    femm.ei_addsegment(x1, y1, x2, y2)
+
+
+
+#Outer circle shape
+femm.ei_addnode(0, 0 + Rout)
+femm.ei_addnode(0, 0 - Rout)
+femm.ei_addarc(0, 0 + Rout, 0, 0 - Rout, 180, 1)
+femm.ei_addarc(0, 0 - Rout, 0, 0 + Rout, 180, 1)
