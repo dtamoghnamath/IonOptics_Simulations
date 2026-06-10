@@ -36,17 +36,26 @@ V_accel  = -1000.0  # accel potential (V)
 
 
 
-#Function for easier segment connection
-#Will add function for arc connection as well
+#Function for easier segment and arc connection
 def seg(x1, y1, x2, y2):
     femm.ei_addnode(x1, y1)
     femm.ei_addnode(x2, y2)
     femm.ei_addsegment(x1, y1, x2, y2)
 
+def arc(x1, y1, x2, y2, angle, max_segments):
+    femm.ei_addnode(x1, y1)
+    femm.ei_addnode(x2, y2)
+    femm.ei_addarc(x1, y1, x2, y2, angle, max_segments)
+
 
 
 #Outer circle shape
+'''
+The old circle code before arc function
 femm.ei_addnode(0, 0 + Rout)
 femm.ei_addnode(0, 0 - Rout)
 femm.ei_addarc(0, 0 + Rout, 0, 0 - Rout, 180, 1)
 femm.ei_addarc(0, 0 - Rout, 0, 0 + Rout, 180, 1)
+'''
+arc(0,0+Rout,0,0-Rout,180,1) #New code using arc function
+arc(0,0-Rout,0,0+Rout,180,1)
