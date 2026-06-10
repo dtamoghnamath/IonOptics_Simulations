@@ -7,18 +7,20 @@ This is a crude simulation setup with only one center hole in each of the grids.
 and make them more detailed if we switched to planar mode
 """
 
-#ION-I Optics grids simulations
+
+
+'''
+Basic Setup
+'''
+
+# Libraries
 import femm
 import numpy as np
 
-
-
-#Open FEMM and create electrostatic document
+# Open FEMM and create electrostatic document
 femm.openfemm()
 femm.newdocument(1) # 1 denotes electrostatic problem
-femm.ei_zoom(-6,-3,2,5)
-
-
+femm.ei_zoom(-6,-3,2,5) # adjust to view simulation
 
 # Define problem: units, type='axi' for axisymmetric
 # ei_probdef(units, type, precision, depth, minangle)
@@ -26,7 +28,10 @@ femm.ei_probdef('millimeters', 'axi', 1e-8, 1, 30)
 
 
 
-#Parameters (can edit this to tweak our design)
+'''
+Parameters (edit these to tweak design)
+'''
+
 ts = 0.5    # screen thickness (mm)
 ta = 0.5    # accel thickness (mm)
 g  = 2.0    # gap between grids (mm) (front face to front face)
@@ -39,7 +44,10 @@ V_accel  = -1000.0  # accel potential (V)
 
 
 
-#Functions for adding segments easier
+'''
+Extra Functions
+'''
+
 #Helper: add a vertical segment (grid wall or hole wall)
 def vseg(r, z1, z2):
     femm.ei_addnode(r, z1)
@@ -51,6 +59,7 @@ def hseg(r1, r2, z):
     femm.ei_addnode(r1, z)
     femm.ei_addnode(r2, z)
     femm.ei_addsegment(r1, z, r2, z)
+
 
 
 '''
@@ -79,6 +88,7 @@ femm.ei_clearselected()
 femm.ei_refreshview()
 
 
+
 '''
 Accelerator Grid
 '''
@@ -105,6 +115,7 @@ femm.ei_clearselected()
 femm.ei_refreshview()
 
 
+
 '''
 Boundary Region
 '''
@@ -121,6 +132,7 @@ femm.ei_addblocklabel(Rout/2, (g + ta)/2)
 femm.ei_selectlabel(Rout/2, (g + ta)/2)
 femm.ei_setblockprop("air", 1, 0, 0)
 femm.ei_clearselected()
+
 
 
 '''
