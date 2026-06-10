@@ -59,3 +59,20 @@ femm.ei_addarc(0, 0 - Rout, 0, 0 + Rout, 180, 1)
 '''
 arc(0,0+Rout,0,0-Rout,180,1) #New code using arc function
 arc(0,0-Rout,0,0+Rout,180,1)
+
+
+
+#Make grid the proper material (stainless steel 304)
+femm.ei_addmaterial('stainless steel 304', 1, 1, 1e6) # NOT ACCURATE
+#(name, permittivity_x, permittivity_y, conductivity)
+
+# Add block label inside circle
+femm.ei_addblocklabel(0.1 * Rout, 0)
+femm.ei_selectlabel(0.1 * Rout, 0)
+
+# Assign material to circle region
+femm.ei_setblockprop("stainless steel 304", 1, 0, 0) # (name, automesh, meshsize, group)
+femm.ei_clearselected()
+femm.ei_refreshview()
+
+
